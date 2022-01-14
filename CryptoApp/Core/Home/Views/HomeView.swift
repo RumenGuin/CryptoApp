@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject private var vm: HomeViewModel
-    @State private var showPortfolio: Bool = false
+    @State private var showPortfolio: Bool = true
     
     
     var body: some View {
