@@ -13,6 +13,9 @@ struct HomeView: View {
     @State private var showPortfolio: Bool = true //animate right
     @State private var showPortfolioView: Bool = false //new sheet
     
+    @State private var selectedCoin: CoinModel? = nil
+    @State private var showDetailView: Bool = false
+    
     var body: some View {
         ZStack{
             //background layer
@@ -30,22 +33,31 @@ struct HomeView: View {
                 
                 columnTitles
                 
-                
                 if !showPortfolio {
                     allCoinsList
                         .transition(.move(edge: .leading))
                 }
-                
                 
                 if showPortfolio {
                     portfolioCoinsList
                         .transition(.move(edge: .trailing))
                 }
                 
+
                 
                 Spacer(minLength: 0)
             }
         }
+        .background(
+        
+            NavigationLink(
+                isActive: $showDetailView,
+                destination: { DetailLoadingView(coin: $selectedCoin)},
+                label: { EmptyView() })
+                
+            
+        
+        )
     }
 }
 
@@ -55,7 +67,6 @@ struct HomeView_Previews: PreviewProvider {
             HomeView()
                 .navigationBarHidden(true)
         }
-        .preferredColorScheme(.dark)
         .environmentObject(dev.homeVM)
     }
 }
@@ -97,9 +108,11 @@ extension HomeView {
         
             List {
                 ForEach(vm.allCoins) { coin in
-                    
                     CoinRowView(coin: coin, showHoldingColumn: false)
                         .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+                        .onTapGesture {
+                            segue(coin: coin)
+                        }
                 }
             }
             .listStyle(PlainListStyle())
@@ -113,9 +126,18 @@ extension HomeView {
                     
                     CoinRowView(coin: coin, showHoldingColumn: true)
                         .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+                        .onTapGesture {
+                            segue(coin: coin)
+                        }
                 }
             }
             .listStyle(PlainListStyle())
+    }
+    
+    //A segue is a smooth transition from one topic or section to the next. (means follows)
+    private func segue(coin: CoinModel) {
+        selectedCoin = coin
+        showDetailView.toggle()
     }
     
     

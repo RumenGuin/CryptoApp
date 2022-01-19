@@ -82,6 +82,7 @@ extension PortfolioView {
                         )
                 }
             }
+            
             .frame(height: 120)
             .padding(.leading)
             
@@ -128,7 +129,8 @@ extension PortfolioView {
                 Text(getCurrentValue().asCurrencyWith2Decimals())
             }
         }
-        //.animation(.none)
+       
+        .animation(.none, value: quantityText)
         .padding()
         .font(.headline)
     }
