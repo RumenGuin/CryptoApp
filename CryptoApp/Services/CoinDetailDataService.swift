@@ -26,8 +26,10 @@ class CoinDetailDataService {
         )
         else {return}
         
-        coinDetailSubscription = NetworkingManager.download(url: url)
-            .decode(type: CoinDetailModel.self, decoder: JSONDecoder())
+        coinDetailSubscription = NetworkingManager.download(url: url) //its in bg thread now as we comment the .receive there
+            .decode(type: CoinDetailModel.self, decoder: JSONDecoder()) //we want to decode on bg thread for optimisation
+            .receive(on: DispatchQueue.main) //receive on main thread after decoding
+        //.sink always on main thread
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] returnedCoinDetails in
                 self?.coinDetails = returnedCoinDetails
                 self?.coinDetailSubscription?.cancel()

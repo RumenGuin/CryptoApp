@@ -26,11 +26,11 @@ class NetworkingManager {
     
     static func download(url: URL) ->  AnyPublisher<Data, Error>  {
         //hold option on temp to get the return type of func (put let temp inplace of return to find out)
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .subscribe(on: DispatchQueue.global(qos: .default)) //bg thread
+        return URLSession.shared.dataTaskPublisher(for: url) //dataTaskPub already in bg thread
+          //  .subscribe(on: DispatchQueue.global(qos: .default)) //bg thread (we dont need this line)
             .tryMap({ try handleURLResponse(output: $0, url: url) })
-            
-            .receive(on: DispatchQueue.main) // receive on main thread
+            .retry(3) // if handleURLResponse() fail means publisher fail, then it gonna retry again to download data from internet
+           // .receive(on: DispatchQueue.main) // receive on main thread (commented as we want .decode in bg thread)
             .eraseToAnyPublisher()
     }
     

@@ -27,8 +27,10 @@ class MarketDataService {
         //using combine
         guard let url = URL(string: "https://api.coingecko.com/api/v3/global") else {return}
         
-        marketDataSubscription = NetworkingManager.download(url: url)
-            .decode(type: GlobalData.self, decoder: JSONDecoder())
+        marketDataSubscription = NetworkingManager.download(url: url) //its in bg thread now as we comment the .receive there
+            .decode(type: GlobalData.self, decoder: JSONDecoder()) //we want to decode on bg thread for optimisation
+            .receive(on: DispatchQueue.main) //receive on main thread after decoding
+        //.sink always on main thread
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] returnedGlobalData in
                 self?.marketData = returnedGlobalData.data
                 self?.marketDataSubscription?.cancel()

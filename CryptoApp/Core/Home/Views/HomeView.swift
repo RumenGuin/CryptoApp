@@ -39,8 +39,14 @@ struct HomeView: View {
                 }
                 
                 if showPortfolio {
-                    portfolioCoinsList
-                        .transition(.move(edge: .trailing))
+                    ZStack(alignment: .top) {
+                        if vm.portfolioCoins.isEmpty && vm.searchText.isEmpty {
+                            portfolioEmptyText
+                        } else {
+                            portfolioCoinsList
+                        }
+                    }
+                    .transition(.move(edge: .trailing))
                 }
                 
                 Spacer(minLength: 0)
@@ -135,6 +141,15 @@ extension HomeView {
                 }
             }
             .listStyle(PlainListStyle())
+    }
+    
+    private var portfolioEmptyText: some View {
+        Text("You haven't added any coins to your portfolio yet. Click the + button to get started! 🧐")
+            .font(.callout)
+            .foregroundColor(Color.theme.accent)
+            .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .padding(50)
     }
     
     //A segue is a smooth transition from one topic or section to the next. (means follows)

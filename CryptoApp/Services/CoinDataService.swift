@@ -25,8 +25,10 @@ class CoinDataService {
         //using combine
         guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h") else {return}
         
-        coinSubscription = NetworkingManager.download(url: url)
-            .decode(type: [CoinModel].self, decoder: JSONDecoder())
+        coinSubscription = NetworkingManager.download(url: url) //its in bg thread now as we comment the .receive there
+            .decode(type: [CoinModel].self, decoder: JSONDecoder()) //we want to decode on bg thread for optimisation
+            .receive(on: DispatchQueue.main) //receive on main thread after decoding
+        //.sink always on main thread
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] returnedCoins in
                 self?.allCoins = returnedCoins
                 self?.coinSubscription?.cancel()
