@@ -7,7 +7,14 @@
 
 import Foundation
 import SwiftUI
-
+//color codes
+/*
+ //pink/accent -FACFFC
+ //bg = white, black
+ //green - light- 008F00, dark- 73FA79
+ //red = light- 941651 , dark- FF2F92
+ //secondary- light- 919191, dark- C0C0C0
+ */
 
 extension Color {
     

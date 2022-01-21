@@ -15,24 +15,34 @@ struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationView {
-            List {
-                mySection
-                coingeckoSection
-                appSection
-            }
-            .font(.headline)
-            .tint(.blue)
-            .navigationTitle("Settings")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.headline)
-                    }
-
+            ZStack {
+                //background
+                Color.theme.background
+                    .ignoresSafeArea()
+                
+                //content
+                List {
+                    mySection
+                        .listRowBackground(Color.theme.background.opacity(0.2))
+                    coingeckoSection
+                        .listRowBackground(Color.theme.background.opacity(0.2))
+                    appSection
+                        .listRowBackground(Color.theme.background.opacity(0.2))
                 }
+                .font(.headline)
+                .tint(.blue)
+                .navigationTitle("Settings")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                        }
+
+                    }
+            }
             }
         }
     }
