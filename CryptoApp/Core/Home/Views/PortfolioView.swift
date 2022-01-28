@@ -133,8 +133,7 @@ extension PortfolioView {
                 Text(getCurrentValue().asCurrencyWith2Decimals())
             }
         }
-       
-        .animation(.none, value: quantityText)
+        .animation(.none, value: selectedCoin)
         .padding()
         .font(.headline)
     }
